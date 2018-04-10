@@ -11,8 +11,13 @@
     "test": "node test.js"
   },
   "dependencies": {
+    "pg": "*",
     "ejs": "*",
     "express": "*"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/browningspencer/cs313-node"
   },
   "author": "Spencer Browning",
   "license": "ISC"
