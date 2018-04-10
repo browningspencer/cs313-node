@@ -1,36 +1,116 @@
-var express = require('express'),
-	path = require('path');
-	bodyParser = require('body-parser'),
-	cons = require('consolidate'),
-	dust = require('dustjs-helpers'),
-	pg = require('pg'),
-	app = express();
+const express = require('express');
+const path = require('path');
+const cookieParser = require('cookie-parser');
+const bodyParser = require('body-parser');
+const util = require('util');
+const url = require('url');
+const cons = require('consolidate');
+const dust = require('dustjs-helpers');
+//const pg = require('pg');
+const { Client } = require('pg');
+var session = require('express-session');
+var User = require('./modules/user');
 
-// DB Connect String
-//var connect = "postgres://username:password@localhost/database";
-var connect = process.env.DATABASE_URL || 'postgres://postgres:$p3nc3r1byui@127.0.0.1:5432/postgres';
+var app = express();
 
-// Assign Dust Engine To .dust files
-app.engine('dust', cons.dust);
+var db_url = url.parse(process.env.DATABASE_URL || 'postgres://postgres:$p3nc3r1byui@127.0.0.1:5432/postgres');
+
+
+var scheme = db_url.protocol.substr(0, db_url.protocol.length - 1);
+var user = db_url.auth.substr(0, db_url.auth.indexOf(':'));
+var pass = db_url.auth.substr(db_url.auth.indexOf(':') + 1, db_url.auth.length);
+var host = db_url.host.substr(0, db_url.host.indexOf(':'));
+var pgport = db_url.host.substr(db_url.host.indexOf(':') + 1, db_url.host.length);
+var db = db_url.path.substr(db_url.path.indexOf('/') + 1, db_url.path.length);
+
+// Connect to the PostgreSQL server
+const client = new Client({
+	host: host,
+	user: user,
+	database, db,
+	password, pass
+});
+
+client.connect();
+
+// Set Public Folder
+app.use(express.static(path.join(__dirname, 'public')));
+
+// set our application port
+// app.set('nodeport', process.env.PORT || 5000);
 
 // Set Default Ext .dust
 app.set('view engine', 'dust');
 app.set('views', __dirname + '/views');
 
-// Set Public Folder
-app.use(express.static(path.join(__dirname, 'public')));
-
 // Body Parser Middleware
 app.use(bodyParser.json());
-app.use(bodyParser.urlencoded({ extended: false}));
+app.use(bodyParser.urlencoded({ extended: true }));
 
+app.use(cookieParser());
+
+// initialize express-session to allow us track the logged-in user across sessions.
+app.use(session({
+	key: 'user_sid',
+	secret: 'imdkaf8dck)6e#ylzr3vsvi^_6xlmig@d@7pmy5tn@coqt(l&k',
+	resave: false,
+	saveUninitialized: false,
+	cookie: {
+		expires: 600000
+	}
+}));
+
+// This middleware will check if user's cookie is still saved in browser and user is not set, 
+// then automatically log the user out. This usually happens when you stop your express server 
+// after login, your cookie still remains saved in the browser.
+app.use((req, res, next) => {
+	if (req.cookies.user_sid && !req.session.user) {
+		res.clearCookie('user_sid');
+	}
+	next();
+});
+
+// middleware function to check for logged-in users
+var sessionChecker = (req, res, next) => {
+	if (req.session.user && req.cookies.user_sid) {
+		res.redirect('/');
+	} else {
+		next();
+	}
+};
+
+
+//const Pool = require('pg-pool');
+//const url = require('url');
+
+// DB Connect String
+//var connect = process.env.DATABASE_URL || 'postgres://postgres:$p3nc3r1byui@127.0.0.1:5432/postgres';
+
+// Assign Dust Engine To .dust files
+app.engine('dust', cons.dust);
+
+
+
+
+
+
+
+// Server
+app.listen(5000, function(){
+	console.log('Server started on port 5000');
+});
+
+
+// ACCESS to SQL DATABASE????
+/*
 app.get('/', function(req, res){
 	// PG Connect
+	//pool.connect(connect, function(err, client, done) {
 	pg.connect(connect, function(err, client, done) {
 		if (err) {
 			return console.error('error fetching client from pool', err);
 		}
-		client.query('SELECT * FROM public.recipes', function(err, result) {
+		client.query('SELECT * FROM recipes', function(err, result) {
 			if (err) {
 				return console.error('error running query', err);
 			}
@@ -38,13 +118,57 @@ app.get('/', function(req, res){
 			done();
 		});
 	});
+	//pool.end();
 	//res.render('index', {recipes: "result.rows"});
 });
 
-// Server
-app.listen(5000, function(){
-	console.log('Server started on port 5000');
+app.post('/add', function(req, res){
+	// PG Connect		
+	pg.connect(connect, function(err, client, done) {
+		if (err) {
+			return console.error('error fetching client from pool', err);
+		}
+		client.query("INSERT INTO recipes(name, ingredients, directions) VALUES($1, $2, $3)", [req.body.name, req.body.ingredients, req.body.directions]);
+
+		done();
+		res.redirect('/');
+	});
+	//res.redirect('/');
 });
+
+app.delete('/delete/:id', function(req, res) {
+	// PG Connect	
+	pg.connect(connect, function(err, client, done) {
+		if (err) {
+			return console.error('error fetching client from pool', err);
+		}
+		client.query("DELETE FROM recipes WHERE id = $1",[req.params.id]);
+
+		done();
+		res.redirect(200);
+	});
+	//res.redirect(200);
+});
+
+app.post('/edit', function(req, res){
+	// PG Connect	
+	pg.connect(connect, function(err, client, done) {
+		if (err) {
+			return console.error('error fetching client from pool', err);
+		}
+		client.query("UPDATE recipes SET name=$1, ingedients=$2, directions=$3 WHERE id = $4", [req.body.name, req.body.ingredients, req.body.directions, req.body.id]);
+
+		done();
+		res.redirect('/');
+	});
+	//res.redirect('/');
+});
+
+*/
+
+
+
+// OLD GARBAGE
 
 
 

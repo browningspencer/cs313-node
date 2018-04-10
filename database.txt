@@ -1,11 +1,11 @@
-CREATE TABLE public.users
+CREATE TABLE users
 (
 user_id SERIAL NOT NULL PRIMARY KEY,
 userName varchar(30) NOT NULL UNIQUE,
 password varchar(18) NOT NULL
 );
 
-CREATE TABLE public.recipes
+CREATE TABLE recipes
 (
 recipe_id SERIAL NOT NULL PRIMARY KEY,
 user_id INT NOT NULL REFERENCES public.users(user_id),
@@ -14,7 +14,7 @@ recipe_ingredients text NOT NULL,
 recipe_directions text NOT NULL
 );
 
-INSERT INTO public.users 
+INSERT INTO users 
 (
 user_id,
 userName, 
@@ -27,7 +27,7 @@ VALUES
 'example'
 );
 
-INSERT INTO public.recipes 
+INSERT INTO recipes 
 (
 user_id,
 recipe_name, 

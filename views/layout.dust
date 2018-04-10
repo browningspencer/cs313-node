@@ -2,14 +2,48 @@
 <html>
 <head>
 	<title>Cilantro</title>
-	<link rel="stylesheet" href="/css/bootstrap.css">
-	<link rel="stylesheet" href="/css/bootstrap.min.css">
+	<link rel="shortcut icon" type="image/x-icon" href="/logo/cilantro-leaf.ico"/>
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css">
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js"></script>
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"></script>
 	<link rel="stylesheet" href="/css/style.css">
 </head>
 <body>
+	<nav class="navbar navbar-expand-md bg-dark navbar-dark">
+		<!-- Brand -->
+		<img class="navbar-brand img-fluid" width="50" src="/logo/cilantro-leaf.png">
+		<a class="navbar-brand" href="#">Cilantro Recipe Book</a>
+
+		<!-- Toggler/collapsible Button -->
+		<button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#collapsibleNavbar">
+	    <span class="navbar-toggler-icon"></span>
+	  </button>
+
+		<!-- Navbar links -->
+		<div class="collapse navbar-collapse" id="collapsibleNavbar">
+    <ul class="navbar-nav">
+      <li class="nav-item">
+        <a class="nav-link" href="#">Sign Out</a>
+      </li>   
+    </ul>
+  </div>
+    <!--<a  href="../accounts/" class="btn btn-primary navbar-btn">Home</a>
+    <?php if(isset($_SESSION['loggedIn'])){
+        echo '<a class="btn btn-danger navbar-btn" href="../accounts?action=Logout">Log Out</a>';}
+    ?>-->
+
+	    <!--<h2>Welcome to your Recipe Book, <?php echo $_SESSION['clientData']['firstname'];  ?>!</h2>-->
+	</nav>
+
+	<br>
+	<br>
+
 	<div class="container">
 		<div class="row">
-			<div class="col-md-offset-2 col-md-7">
+			<div class="offset-md-1 col-md-10">
 				{+body /}
 			</div>
 		</div>
@@ -18,5 +52,6 @@
 	<script src="http://code.jquery.com/jquery-1.12.0.min.js"></script>
 	<script src="/js/bootstrap.js"></script>
 	<script src="/js/bootstrap.bundle.js"></script>
+	<script src="/js/main.js"></script>
 </body>
 </html>

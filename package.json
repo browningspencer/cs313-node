@@ -2,25 +2,28 @@
   "name": "project2",
   "version": "1.0.0",
   "description": "Project 2 using Node.js",
-  "engines": {
-    "node": "8.9.4",
-    "npm": "5.8.0"
-  },
-  "main": "index.js",
   "scripts": {
-    "start": "node index.js",
+    "start": "node ./bin/www",
     "test": "node test.js"
   },
   "dependencies": {
+    "bcrypt": "^1.0.3",
     "body-parser": "*",
+    "brcypt": "^1.0.1",
     "consolidate": "*",
+    "cookie-parser": "^1.4.3",
+    "debug": "~2.6.9",
     "dotenv": "*",
     "dust": "*",
     "dustjs-helpers": "*",
     "dustjs-linkedin": "*",
     "ejs": "*",
-    "express": "*",
-    "pg": "^6.4.2"
+    "express": "^4.16.3",
+    "express-session": "^1.15.6",
+    "express-validator": "^5.0.3",
+    "pg": "^7.4.1",
+    "postgresql": "0.0.1",
+    "sequelize": "^3.32.1"
   },
   "repository": {
     "type": "git",
