@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>Project 2</title>
+
+	<script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1/jquery.js"></script>
+</head>
+<body>
+	<form>
+		Input
+		<input type="text" value="Water" id="input"><br><br>
+		<input type="button" value="Submit" onClick="getInput()">
+	</form><br>
+
+	<div id="output"></div>
+	<script>
+		function getInput() {
+			var input = document.getElementById("input").value;
+			var url_name = "https://api.nal.usda.gov/ndb/search/?format=json&q=" + input + "&sort=n&max=5&offset=0&api_key=D5UxQY01JCyybgL6fwjRCJ8BCx3Ib4jc2W7zbUEM";
+			var url_nutrient = "https://api.nal.usda.gov/ndb/nutrients/?format=json&api_key=D5UxQY01JCyybgL6fwjRCJ8BCx3Ib4jc2W7zbUEM&nutrients=205&nutrients=204&nutrients=208&nutrients=269&max=5&ndbno=";
+			var food_id = "";			
+
+			fetch(url_name)
+				.then(
+					function(res) {
+						if (res.status !== 200) {
+							console.log('Looks like there was a problem. Status Code: ' + res.status);
+							return;
+						}
+						res.json().then(function(data) {
+							food_id = getId(data.list);
+							url_nutrient += food_id;
+						})
+					})
+
+			fetch(url_nutrient)
+				.then(
+					function(res) {
+						if (res.status !== 200) {
+							console.log('Looks like there was a problem. Status Code: ' + res.status);
+							return;
+						}
+						res.json().then(function(data) {
+							displayFood(data.report);
+						})
+					})
+		}
+
+		function getId(data) {
+			var food_id = data.item[0].ndbno;
+
+			return food_id;
+		}
+
+
+		function displayFood(data) {
+			var output = document.getElementById("output");
+			var food = data.foods[0].name;
+			var nutrients = data.foods[0].nutrients;
+
+			output.innerHTML += food + "<br>";
+
+			for (var i = 0; i < nutrients.length; i++) {
+				var options = nutrients[i].unit;
+
+				output.innerHTML += options + "<br>";
+
+			}
+		}
+
+	</script>
+</body>
+</html>
