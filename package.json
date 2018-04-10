@@ -3,7 +3,8 @@
   "version": "1.0.0",
   "description": "Project 2 using Node.js",
   "engines": {
-    "node": "*"
+    "node": "8.9.4",
+    "npm": "5.8.0"
   },
   "main": "index.js",
   "scripts": {
@@ -11,9 +12,15 @@
     "test": "node test.js"
   },
   "dependencies": {
-    "pg": "*",
+    "body-parser": "*",
+    "consolidate": "*",
+    "dotenv": "*",
+    "dust": "*",
+    "dustjs-helpers": "*",
+    "dustjs-linkedin": "*",
     "ejs": "*",
-    "express": "*"
+    "express": "*",
+    "pg": "^6.4.2"
   },
   "repository": {
     "type": "git",

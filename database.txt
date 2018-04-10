@@ -1,0 +1,153 @@
+CREATE TABLE public.users
+(
+user_id SERIAL NOT NULL PRIMARY KEY,
+userName varchar(30) NOT NULL UNIQUE,
+password varchar(18) NOT NULL
+);
+
+CREATE TABLE public.recipes
+(
+recipe_id SERIAL NOT NULL PRIMARY KEY,
+user_id INT NOT NULL REFERENCES public.users(user_id),
+recipe_name varchar(255) NOT NULL,
+recipe_ingredients text NOT NULL,
+recipe_directions text NOT NULL
+);
+
+INSERT INTO public.users 
+(
+user_id,
+userName, 
+password 
+)
+VALUES 
+(
+0,
+'example', 
+'example'
+);
+
+INSERT INTO public.recipes 
+(
+user_id,
+recipe_name, 
+recipe_ingredients, 
+recipe_directions
+) 
+VALUES 
+(
+0,
+'KISS Salmon', 
+'2 Salmon Fillets, 1/4 Cup Barbeque Sauce, 1/4 Cup Rasberry Jam', 
+'Preheat oven to 400 degrees. Grease an 11x7-inch baking dish. Place the salmon fillets into the prepared baking dish with skin sides down. Stir the barbeque souce and raspberry jam together in a small bowl. Generously brush the mixture over the salmon. Bake in the preheated oven until the salmon is opaque and flakes easily with a fork, 35 to 40 minutes. Brush again with the sauce mixture after the first 15 minutes of baking time'
+);
+
+
+--------------------------------------------------------
+
+CREATE TABLE public.users
+(
+user_id SERIAL NOT NULL PRIMARY KEY,
+userName varchar(20) NOT NULL UNIQUE,
+password varchar(12) NOT NULL
+
+);
+
+CREATE TABLE public.conference
+(
+conference_id SERIAL NOT NULL PRIMARY KEY,
+year SMALLINT NOT NULL,
+is_spring BOOLEAN NOT NULL
+
+);
+
+CREATE TABLE public.speaker
+(
+speaker_id SERIAL NOT NULL PRIMARY KEY,
+name varchar(50) NOT NULL
+
+);
+
+CREATE TABLE public.note
+(
+note_id SERIAL NOT NULL PRIMARY KEY,
+user_id INT NOT NULL REFERENCES public.users(user_id),
+conference_id INT NOT NULL REFERENCES public.conference(conference_id),
+speaker_id INT NOT NULL REFERENCE public.speaker(speaker_id),
+note_text text NOT NULL
+);
+
+--NEW--
+CREATE TABLE public.recipes
+(
+recipeid SERIAL NOT NULL PRIMARY KEY,
+userid INT NOT NULL REFERENCES public.users(userid),
+recipetitle varchar(50) NOT NULL,
+recipecategory varchar(20) NOT NULL, 
+recipedate date NOT NULL DEFAULT NOW(),
+recipeingredients text NOT NULL,
+recipedirections text NOT NULL
+);
+
+
+--OLD--
+CREATE TABLE public.recipes                                                                          
+(                                    
+recipeid SERIAL NOT NULL PRIMARY KEY,                                                        userid INT NOT NULL REFERENCES public.users(userid),                                                                                   recipetitle varchar(50) NOT NULL,                                                            recipedate date NOT NULL DEFAULT NOW(),                                                      recipetext text NOT NULL                                                                     );
+
+
+CREATE TABLE topic ( 
+id SERIAL NOT NULL PRIMARY KEY,
+name VARCHAR(64) UNIQUE NOT NULL
+);
+
+INSERT INTO topic (name) VALUES ('Faith'), ('Sacrifice'), ('Charity');
+
+CREATE TABLE topic_scripture_relation ( 
+id SERIAL NOT NULL PRIMARY KEY,
+scripture_id INTEGER NOT NULL REFERENCES scriptures(id),
+topic_id INTEGER NOT NULL REFERENCES topic(id)
+);
+
+
+
+
+
+
+CREATE TABLE scriptures
+( id                    SERIAL         PRIMARY KEY
+, book                  VARCHAR(20)    NOT NULL
+, chapter               INTEGER        NOT NULL
+, verse                 INTEGER        NOT NULL
+, content               TEXT           NOT NULL);
+
+INSERT INTO scriptures
+( book
+, chapter
+, verse
+, content)
+VALUES
+( 'John'
+, 1
+, 5
+, 'And the light shineth in darkness; and the darkness comprehended it not.')
+, 
+( 'D&C'
+, 88
+, 49
+, 'The light shineth in darkness, and the darkness comprehendeth it not;
+ nevertheless, the day shall come when you shall comprehend even God, being
+ quickened in him and by him.')
+, 
+( 'D&C'
+, 93
+, 28
+, 'He that keepeth his commandments receiveth truth and light, until he is
+ glorified in truth and knoweth all things.')
+, 
+( 'Mosiah'
+, 16
+, 9
+, 'He is the light and the life of the world; yea, a light that is endless,
+ that can never be darkened; yea, and also a life which is endless, that there
+ can be no more death.');
