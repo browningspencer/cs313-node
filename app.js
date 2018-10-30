@@ -13,7 +13,7 @@ var User = require('./modules/user');
 
 var app = express();
 
-var db_url = url.parse(process.env.DATABASE_URL || 'postgres://postgres:$p3nc3r1byui@127.0.0.1:5432/postgres');
+var db_url = url.parse(process.env.DATABASE_URL || 'postgres://postgres:byuipassword@127.0.0.1:5432/postgres');
 
 
 var scheme = db_url.protocol.substr(0, db_url.protocol.length - 1);
